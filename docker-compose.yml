@@ -9,7 +9,7 @@ services:
         - POSTGRES_USER=surveyor
         - POSTGRES_DB=surveyor
     ports:
-        - "5432:5432"
+        - "5433:5432"
   manager:
     image: com.surveyor.manager
     ports:

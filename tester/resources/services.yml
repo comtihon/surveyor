@@ -1,6 +1,6 @@
 postgres:
   host: localhost
-  port: 5432
+  port: 5433
   user: surveyor
   password: surveyor
   database: surveyor
