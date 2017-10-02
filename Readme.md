@@ -1,4 +1,4 @@
-# Surveyor 
+# Surveyor [![Build Status](https://travis-ci.org/comtihon/surveyor.svg?branch=master)](https://travis-ci.org/comtihon/surveyor)
 Service that allows survey creation, questions answering and statistics calculation.  
 ## Architecture
 Surveyor service contains 4 microservices and 3 third-party services:
@@ -58,7 +58,7 @@ __Requirements__:
 * [docker](https://www.docker.com/)
 * [docker-compose](https://docs.docker.com/compose/)
 
-## Integration testing  [![Build Status](https://travis-ci.org/comtihon/surveyor.svg?branch=master)](https://travis-ci.org/comtihon/surveyor)
+## Integration testing
 Run integrations tests for surveyor microservises.
 ### Full test
 1. create survey in `manager`
