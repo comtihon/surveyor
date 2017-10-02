@@ -58,7 +58,7 @@ __Requirements__:
 * [docker](https://www.docker.com/)
 * [docker-compose](https://docs.docker.com/compose/)
 
-## Integration testing
+## Integration testing  [![Build Status](https://travis-ci.org/comtihon/surveyor.svg?branch=master)](https://travis-ci.org/comtihon/surveyor)
 Run integrations tests for surveyor microservises.
 ### Full test
 1. create survey in `manager`

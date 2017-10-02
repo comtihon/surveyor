@@ -1,0 +1,14 @@
+sudo: required
+language: python
+ - "3.6"
+cache:
+  directories:
+    - $HOME/services
+install: "python setup.py install"
+services:
+  - docker
+script:
+  - bash travis/install_deps.sh
+  - make run
+  - bash travis/sleep_if_needed.sh
+  - make test_run
