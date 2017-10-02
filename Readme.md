@@ -16,8 +16,7 @@ the same `MongoDB` as `Collector`.
 7. [MongoDB](https://www.mongodb.com/) for online statistics. It doesn't store full statistics, instead is increments 
 counters for every answer in question. Dynamic documents are used.
 
-
-
+```
     Survey/Question/Answer CRUD --> Manager -->  Postgres
     & Step-by-step attach                           ||
                                                     || Surveys, Questions, Answers configuration
@@ -29,6 +28,7 @@ counters for every answer in question. Dynamic documents are used.
                                                                                                               ||
                                                                                                               \/
                                                         Get statistics request (question) -------->       Statistics
+```
 ## Waiting for a highload
 1. index `question_id` in `MongoDB`
 2. switch to [avro](https://avro.apache.org/) or [msgpack](http://msgpack.org/index.html) in `Kafka`
