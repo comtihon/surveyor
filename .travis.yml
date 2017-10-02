@@ -4,7 +4,6 @@ language: python
 cache:
   directories:
     - $HOME/services
-install: "python setup.py install"
 services:
   - docker
 script:
