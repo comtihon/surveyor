@@ -17,6 +17,7 @@ the same `MongoDB` as `Collector`.
 counters for every answer in question. Dynamic documents are used.
 
 
+
     Survey/Question/Answer CRUD --> Manager -->  Postgres
     & Step-by-step attach                           ||
                                                     || Surveys, Questions, Answers configuration
