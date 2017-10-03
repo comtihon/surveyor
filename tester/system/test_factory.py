@@ -10,7 +10,7 @@ def get_all_tests(tests: list) -> ['class']:
     tests_available = get_all_tests_available()
     if tests == ['all']:
         return tests_available
-    return [t for t in tests_available if t.name in tests]
+    return [t for t in tests_available if t.__module__.split('.')[-1:][0] in tests]
 
 
 def import_all_tests():
