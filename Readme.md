@@ -58,6 +58,9 @@ __Requirements__:
 * [docker](https://www.docker.com/)
 * [docker-compose](https://docs.docker.com/compose/)
 
+
+    make stop
+will stop all the services
 ## Integration testing
 Run integrations tests for surveyor microservises.
 ### Full test
@@ -76,11 +79,12 @@ Same as full test but without kafka step, as there are some problems with docker
     make test_build && make test_install && survey_tester
 or simple:
 
-    make test
-__Important__: Services should be accessible for tests. Running `make run && make test` will do all the job.   
+    make test_run
+__Important__: Services should be accessible for tests. 
+Running `make run && ./travis/sleep_if_needed.sh && make test_run` will do the job.   
 __Requirements__:
 * [python3.6](https://www.python.org/downloads/release/python-360/). Service is not compatible with python2.7. 
-Compatibility with 3.0-3.5 versions was not tested.
+Compatibility with 3.0-3.5 versions was not tested. _(python should be linked to python3 in your os)_
 * [pip](https://pypi.python.org/pypi/pip). If your os provide `pip3` instead - you should modify Makefile to use pip3.
 * [wheel](https://pypi.python.org/pypi/wheel)
 All other dependencies should be resolved automatically by wheel. 
