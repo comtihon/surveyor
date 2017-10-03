@@ -1,13 +1,13 @@
 from colorama import Fore
 
 from tester.test.full import FullTest
-from tester.test.test import Test
 
 
 # Same as FullTest but without kafka
-class TravisTest(Test, FullTest):
+class TravisTest(FullTest):
     def __init__(self, conf: dict) -> None:
-        FullTest.__init__(__name__, conf)
+        super().__init__(conf)
+        self._name = __name__.split('.')[-1:][0]
 
     def check_answers(self, survey_id: str, answers_selected: list) -> bool:
         unanswered = self.requests.answer(survey_id, answers_selected)

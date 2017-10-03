@@ -69,6 +69,8 @@ Run integrations tests for surveyor microservises.
 6. check `kafka` for answers
 7. check answer statistics in `mongodb` (sometimes test is too fast and fails here. Just re-run)
 8. check answer statistics via `statistics`
+### Travis test
+Same as full test but without kafka step, as there are some problems with docker, kafka, TravisCI and python-kafka.
 ### Run
 
     make test_build && make test_install && survey_tester
@@ -89,7 +91,7 @@ System configuration is available in `tester/resources/services.yml`
 
 ### Adding your test
 Add your test in two steps:
- * create module in `tester.test` package implementing `Test` module.
+ * create module in `tester.test` package implementing `Test` module or any of its children.
  * and... that's all. Now second step  
 
 System configuration is passed to your `init` method as dict.
