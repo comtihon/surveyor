@@ -20,10 +20,7 @@ before_install:
   # Load cached docker images
   - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 script:
-  - python --version
-  - pip --version
-  - python setup.py bdist_wheel
-  - sudo pip install dist/survey_tester-1.0.0-py3-none-any.whl
+  - python setup.py install
   - make run
   - bash travis/sleep_if_needed.sh
   - survey_tester
