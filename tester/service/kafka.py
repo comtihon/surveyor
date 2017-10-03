@@ -9,14 +9,21 @@ from kafka.consumer.fetcher import ConsumerRecord
 class Kafka:
     def __init__(self, conf: dict) -> None:
         super().__init__()
-        host = conf['host']
-        port = str(conf['port'])
-        topic = conf['topic']
-        self._consumer = self.connect_consumer(host, port, topic)
+        self._host = conf['host']
+        self._port = str(conf['port'])
+        self._topic = conf['topic']
 
     @property
-    def consumer(self) -> KafkaConsumer:
-        return self._consumer
+    def host(self) -> str:
+        return self._host
+
+    @property
+    def port(self) -> str:
+        return self._port
+
+    @property
+    def topic(self) -> str:
+        return self._topic
 
     def connect_consumer(self, host, port, topic, retry=True):
         try:
@@ -24,7 +31,7 @@ class Kafka:
                                  group_id='tester',
                                  bootstrap_servers=host + ':' + port,
                                  auto_offset_reset='earliest',
-                                 api_version=(0, 11))
+                                 api_version=(0, 10, 1))
         except:
             if retry:
                 sleep(5)
@@ -34,7 +41,8 @@ class Kafka:
 
     def check_answers(self, answers_selected: list) -> bool:
         print('Checking answers in kafka', end=' ')
-        streamed_answeres = self.get_messages()
+        consumer = self.connect_consumer(self.host, self.port, self.topic)
+        streamed_answeres = self.get_messages(consumer)
         if streamed_answeres is None or streamed_answeres == {}:
             print(Fore.RED + 'No answeres streamed to kafka')
             return False
@@ -46,8 +54,8 @@ class Kafka:
         print(Fore.GREEN + 'OK')
         return True
 
-    def get_messages(self) -> dict:
-        consumer_records = self.consumer.poll(10000).values()
+    def get_messages(self, consumer) -> dict:
+        consumer_records = consumer.poll(10000).values()
         records = [item for sublist in consumer_records for item in sublist]
         list_of_dicts = [Kafka.parse_value(c) for c in records]
         streamed = {}
