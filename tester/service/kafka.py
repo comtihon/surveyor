@@ -4,7 +4,6 @@ from time import sleep
 from colorama import Fore
 from kafka import KafkaConsumer
 from kafka.consumer.fetcher import ConsumerRecord
-from kafka.errors import NoBrokersAvailable
 
 
 class Kafka:
@@ -25,7 +24,7 @@ class Kafka:
                                  group_id='tester',
                                  bootstrap_servers=host + ':' + port,
                                  auto_offset_reset='earliest')
-        except NoBrokersAvailable as err:
+        except Exception as err:
             if retry:
                 sleep(5)
                 return self.connect_consumer(host, port, topic, False)
