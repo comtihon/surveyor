@@ -25,4 +25,5 @@ script:
   - sudo pip3 install dist/survey_tester-1.0.0-py3-none-any.whl
   - make run
   - bash travis/sleep_if_needed.sh
+  - sudo docker logs surveyor_kafka_1
   - survey_tester

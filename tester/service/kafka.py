@@ -24,11 +24,11 @@ class Kafka:
                                  group_id='tester',
                                  bootstrap_servers=host + ':' + port,
                                  auto_offset_reset='earliest')
-        except Exception as err:
+        except:
             if retry:
                 sleep(5)
                 return self.connect_consumer(host, port, topic, False)
-            print(Fore.RED + 'No kafka brokers available: ' + str(err))
+            print(Fore.RED + 'No kafka brokers available')
             raise Exception('No kafka brokers available')
 
     def check_answers(self, answers_selected: list) -> bool:
