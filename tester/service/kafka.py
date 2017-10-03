@@ -1,8 +1,10 @@
 import json
+from time import sleep
 
 from colorama import Fore
 from kafka import KafkaConsumer
 from kafka.consumer.fetcher import ConsumerRecord
+from kafka.errors import NoBrokersAvailable
 
 
 class Kafka:
@@ -11,14 +13,24 @@ class Kafka:
         host = conf['host']
         port = str(conf['port'])
         topic = conf['topic']
-        self._consumer = KafkaConsumer(topic,
-                                       group_id='tester',
-                                       bootstrap_servers=host + ':' + port,
-                                       auto_offset_reset='earliest')
+        self._consumer = self.connect_consumer(host, port, topic)
 
     @property
     def consumer(self) -> KafkaConsumer:
         return self._consumer
+
+    def connect_consumer(self, host, port, topic, retry=True):
+        try:
+            return KafkaConsumer(topic,
+                                 group_id='tester',
+                                 bootstrap_servers=host + ':' + port,
+                                 auto_offset_reset='earliest')
+        except NoBrokersAvailable as err:
+            if retry:
+                sleep(5)
+                return self.connect_consumer(host, port, topic, False)
+            print(Fore.RED + 'No kafka brokers available: ' + str(err))
+            raise Exception('No kafka brokers available')
 
     def check_answers(self, answers_selected: list) -> bool:
         print('Checking answers in kafka', end=' ')
