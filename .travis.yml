@@ -23,4 +23,4 @@ script:
   - sudo pip install dist/survey_tester-1.0.0-py2-none-any.whl
   - make run
   - bash travis/sleep_if_needed.sh
-  - make test_run
+  - survey_tester
