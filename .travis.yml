@@ -7,7 +7,7 @@ cache:
 services:
   - docker
 script:
-  - bash travis/install_deps.sh
   - make run
+  - python -m pip install --upgrade pip
   - bash travis/sleep_if_needed.sh
   - make test_run
