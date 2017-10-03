@@ -1,6 +1,6 @@
 sudo: required
 language: python
- - "3.6"
+ - '3.6'
 cache:
   directories:
     - $HOME/services
@@ -17,10 +17,11 @@ cache:
     - $HOME/docker
 before_install:
   # Load cached docker images
+  - source ~/virtualenv/python3.5/bin/activate
   - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 script:
-  - python setup.py bdist_wheel
-  - sudo pip install dist/survey_tester-1.0.0-py2-none-any.whl
+  - python3 setup.py bdist_wheel
+  - sudo pip3 install dist/survey_tester-1.0.0-py3-none-any.whl
   - make run
   - bash travis/sleep_if_needed.sh
   - survey_tester
