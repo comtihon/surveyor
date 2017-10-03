@@ -1,6 +1,6 @@
 sudo: required
 language: python
- - '3.6'
+ - "3.6.1"
 cache:
   directories:
     - $HOME/services
@@ -16,6 +16,9 @@ cache:
   directories:
     - $HOME/docker
 before_install:
+  - pyenv versions
+  - python --version
+  - python3 --version
   - sudo apt-get -qq update
   - sudo apt-get install -y python3-pip
   # Load cached docker images
