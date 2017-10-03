@@ -1,6 +1,7 @@
 sudo: required
 language: python
- - "3.6.1"
+python:
+  - "3.6"
 cache:
   directories:
     - $HOME/services
@@ -16,17 +17,10 @@ cache:
   directories:
     - $HOME/docker
 before_install:
-  - pyenv versions
-  - python --version
-  - python3 --version
-  - sudo apt-get -qq update
-  - sudo apt-get install -y python3-pip
   # Load cached docker images
   - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 script:
-  - python3 setup.py bdist_wheel
-  - sudo pip3 install dist/survey_tester-1.0.0-py3-none-any.whl
+  - python setup.py bdist_wheel
   - make run
   - bash travis/sleep_if_needed.sh
-  - sudo docker logs surveyor_kafka_1
-  - survey_tester
+  - make test_run
