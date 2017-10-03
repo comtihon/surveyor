@@ -8,7 +8,7 @@ setup(name='survey_tester',
       author='Val',
       author_email='valerii.tikhonov@gmail.com',
       packages=find_packages(),
-      install_requires=['docopt', 'colorama', 'PyYAML', 'requests', 'kafka', 'pymongo'],
+      install_requires=['docopt', 'colorama', 'PyYAML', 'requests', 'kafka', 'pymongo', 'psycopg2'],
       entry_points={
           'console_scripts': [
               'survey_tester=tester.__main__:main'

@@ -16,7 +16,6 @@ cache:
   directories:
     - $HOME/docker
 before_install:
-  - source ~/virtualenv/python3.5/bin/activate
   - sudo apt-get -qq update
   - sudo apt-get install -y python3-pip
   # Load cached docker images
