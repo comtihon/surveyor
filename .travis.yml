@@ -18,7 +18,7 @@ cache:
 before_install:
   - source ~/virtualenv/python3.5/bin/activate
   - sudo apt-get -qq update
-  - sudo apt-get install -y python-pip3
+  - sudo apt-get install -y python3-pip
   # Load cached docker images
   - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 script:
