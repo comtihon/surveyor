@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 
 class Test:
-    def __init__(self, name: str, conf: dict) -> None:
+    def __init__(self, name: str) -> None:
         self._name = name.split('.')[-1:][0]  # remove tester.test.
 
     @abstractmethod

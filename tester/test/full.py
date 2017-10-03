@@ -12,7 +12,7 @@ from tester.utils.model_utils import compare_surveys
 
 class FullTest(Test):
     def __init__(self, conf: dict) -> None:
-        super().__init__(__name__, conf)
+        super().__init__(__name__)
         self._manager = Manager(conf['manager'])
         self._postgres = Postgres(conf['postgres'])
         self._requests = Requests(conf['requests'])
