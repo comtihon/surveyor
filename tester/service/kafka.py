@@ -23,7 +23,8 @@ class Kafka:
             return KafkaConsumer(topic,
                                  group_id='tester',
                                  bootstrap_servers=host + ':' + port,
-                                 auto_offset_reset='earliest')
+                                 auto_offset_reset='earliest',
+                                 api_version=(0, 11))
         except:
             if retry:
                 sleep(5)
