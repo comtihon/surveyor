@@ -17,3 +17,5 @@ build manager
 build statistics
 build requests
 build collector
+
+docker build -t surveyor .

@@ -1,0 +1,12 @@
+survey_manager_url: 'http://127.0.0.1:8080'
+survey_postgres: 'surveyor:surveyor@localhost:5433/surveyor'
+survey_requests_url: 'http://127.0.0.1:8083'
+survey_statistics_url: 'http://127.0.0.1:8082'
+kafka_server: '127.0.0.1:9092'
+answer_topic: 'answers'
+mongo_conf:
+  database: 'surveyor'
+  username: 'surveyor'
+  password: 'surveyor'
+  host: 'localhost'
+  port: 27017

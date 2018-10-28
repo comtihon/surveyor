@@ -1,0 +1,98 @@
+# Kafka don't work properly in travis for some reason (only on connect from test).
+# Need to skip all kafka steps.
+---
+include:
+    - file: script/substeps/wait_for_survey.yml
+    - file: script/substeps/check_statistics.yml
+      as: check_statistics
+
+variables:
+  survey:
+    name: 'test_survey'
+    country_code: 'en'
+    questions:
+    - {name: 'question1', answers: [{name: 'yes'}, {name: 'no'}]}
+    - {name: 'question2', answers: [{name: 'yes'}, {name: 'no'}]}
+  answers: {}
+  replies: []
+steps:
+- http:
+    name: 'Create survey'
+    post:
+      url: '{{ survey_manager_url }}/survey'
+      body: '{{ survey |tojson }}'
+    register: {survey_id: '{{ OUTPUT.response }}'}
+- check: '{{ survey_id != None }}'
+- postgres:
+    actions:
+    - name: 'Check survey saved'
+      request:
+        conf: '{{ survey_postgres }}'
+        query: "select * from survey where survey_id='{{ survey_id }}'"
+      register: {survey_from_db: '{{ OUTPUT }}'}
+    - name: 'Check questions saved'
+      request:
+        conf: '{{ survey_postgres }}'
+        query: "SELECT * from question where survey_id='{{ survey_id }}'"
+      register: {questions_from_db: '{{ dict(OUTPUT|groupby(1)) }}'}
+- check: '{{ survey_from_db != None and questions_from_db != None }}'
+- http:
+    name: 'Get survey {{ survey_id }}'
+    get:
+      url: '{{ survey_manager_url }}/survey/{{ survey_id }}'
+    register: {survey_got: '{{ OUTPUT.response }}'}
+- loop:
+    foreach:
+      name: 'Check answers saved'
+      in: '{{ questions_from_db }}'
+      do:
+        postgres:
+          request:
+            conf: '{{ survey_postgres }}'
+            query: "select * from answer where question_id='{{ questions_from_db[ITEM][0][0] }}'"
+          register:
+            answers: "{{ answers.update(dict(OUTPUT|groupby(2)))|default(answers, true) }}"
+- check:
+    name: 'Compare surveys'
+    and:
+    - equals: {the: '{{ survey_from_db[2] }}', is: '{{ survey_got.name }}'}
+    - equals: {the: '{{ survey_from_db[1] }}', is: '{{ survey_got.country_code }}'}
+- loop:
+    name: 'Compare questions'
+    foreach:
+      in: '{{ survey_got.questions }}'
+      do:
+      - check:  # question with this name was saved to db
+          contains: {the: '{{ ITEM.name }}', in: '{{ questions_from_db }}'}
+          register: {answers_by_id: '{{ dict(answers[questions_from_db[ITEM.name][0][0]]|groupby(0)) }}'}
+      - loop:  # question's answers match
+          foreach:
+            in: '{{ ITEM.answers }}'
+            do:
+              check:
+                equals: {the: '{{ answers_by_id[ITEM.id][0][1] }}', is: '{{ ITEM.name }}'}
+- echo:  # add answer ids to replies in Jinja2 for loop
+    from: "{% for k, v in answers.items() %} {{ replies.append({'id':v[0][0], 'q': k}) }} {% endfor %}"
+    to: '/dev/null'
+    register: {replies_by_id: '{{ dict(replies|groupby("q")) }}'}
+- http:
+    name: 'Send answers'
+    post:
+      url: '{{ survey_requests_url}}/respond/{{ survey_id }}'
+      body: '{{ replies |tojson }}'
+    register: {unanswered: '{{ OUTPUT.response }}'}
+- check:
+    name: 'All questions were answered'
+    equals: {the: '{{ unanswered }}', is: []}
+- loop:
+    name: 'Check answer statistics'
+    foreach:
+      in: '{{ survey_got.questions }}'
+      do:
+        run:
+          include: check_statistics.travis
+          name: 'Check answer statistics'
+          variables:
+            answer_id: '{{ replies_by_id[ITEM.id][0]["id"] }}'
+
+

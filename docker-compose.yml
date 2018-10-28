@@ -5,11 +5,12 @@ services:
     image: postgres
     restart: always
     environment:
-        - POSTGRES_PASSWORD=surveyor
-        - POSTGRES_USER=surveyor
-        - POSTGRES_DB=surveyor
+        POSTGRES_PASSWORD: "surveyor"
+        POSTGRES_USER: "surveyor"
+        POSTGRES_DB: "surveyor"
     ports:
         - "5433:5432"
+
   manager:
     image: com.surveyor.manager
     ports:
@@ -26,10 +27,10 @@ services:
     ports:
         - "9092:9092"
     environment:
-        - KAFKA_ADVERTISED_HOST_NAME=kafka
-        - KAFKA_ADVERTISED_PORT=9092
-        - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-        - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+        KAFKA_ADVERTISED_HOST_NAME: "kafka"
+        KAFKA_ADVERTISED_PORT: "9092"
+        KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+        KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
@@ -37,28 +38,31 @@ services:
   requests:
     image: com.surveyor.requests
     ports:
-        - "8081:8080"
+        - "8083:8080"
     depends_on:
         - postgres
         - kafka
+
   mongodb:
     image: mongo:latest
     environment:
-        - MONGO_DATA_DIR=/data/db
-        - MONGO_LOG_DIR=/dev/null
-        - MONGO_INITDB_ROOT_USERNAME=surveyor
-        - MONGO_INITDB_ROOT_PASSWORD=surveyor
-        - MONGO_INITDB_DATABASE=surveyor
+        MONGO_DATA_DIR: "/data/db"
+        MONGO_LOG_DIR: "/dev/null"
+        MONGO_INITDB_ROOT_USERNAME: "surveyor"
+        MONGO_INITDB_ROOT_PASSWORD: "surveyor"
+        MONGO_INITDB_DATABASE: "surveyor"
     volumes:
         - ./data/db:/data/db
     ports:
         - "27017:27017"
     command: mongod --smallfiles
+
   collector:
     image: com.surveyor.collector
     depends_on:
         - mongodb
         - kafka
+
   statistics:
     image: com.surveyor.statistics
     ports:

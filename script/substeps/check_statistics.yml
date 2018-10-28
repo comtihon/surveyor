@@ -1,0 +1,37 @@
+steps:
+- kafka: # Check answers in kafka
+    name: 'Check answer for {{ ITEM.name }} in kafka'
+    consume:
+      server: '{{ kafka_server }}'
+      topic: '{{ answer_topic }}'
+      timeout: {seconds: 5}
+      where:
+        equals: {the: '{{ MESSAGE.questionId }}', is: '{{ ITEM.id }}'}
+    register: {message: '{{ OUTPUT }}'}
+- check:
+    equals:
+      {the: "{{ message['answerId'] }}", is: "{{ answer_id }}"}
+- wait:
+    seconds: 2 # wait for statistics to be populated
+    tag: travis
+- mongo: # Check statistics in mongo
+    name: 'Check answer for {{ ITEM.name }} in mongo'
+    request:
+      conf: '{{ mongo_conf }}'
+      collection: 'statistics'
+      find_one: {question_id: '{{ ITEM.id }}'}
+    register: {document: '{{ OUTPUT }}'}
+    tag: travis
+- check:
+    equals: {the: "{{ document[answer_id] }}", is: 1}
+    tag: travis
+- http:  # Check statistics REST service
+    name: 'Request statistics for {{ ITEM.name }}'
+    get:
+      url: '{{ survey_statistics_url }}/question/{{ ITEM.id }}'
+    register: {statistics: '{{ OUTPUT["response"] }}'}
+    tag: travis
+- check:
+    equals:
+      {the: '{{ statistics[answer_id] }}', is: 1}
+    tag: travis
