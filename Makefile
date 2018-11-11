@@ -1,14 +1,10 @@
-.PHONY: build test_run run
+.PHONY: build run test
 
-test_build:
-	python setup.py bdist_wheel
-test_install: test_build
-	sudo pip install dist/survey_tester-1.0.0-py3-none-any.whl
-test_run: test_install
-	survey_tester
-build: 
+build:
 	./build_images.sh
 run: build
-	docker-compose up -d
+	docker-compose -p surveyor up -d
 stop:
-	docker-compose down
+	docker-compose -p surveyor down
+test:
+	docker run -t --network=container:surveyor_manager_1 surveyor -i inventory/docker.yml

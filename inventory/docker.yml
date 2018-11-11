@@ -1,0 +1,12 @@
+survey_manager_url: 'http://manager:8080'
+survey_postgres: 'surveyor:surveyor@postgres:5432/surveyor'
+survey_requests_url: 'http://requests:8080'
+survey_statistics_url: 'http://statistics:8080'
+kafka_server: 'kafka:9093'
+answer_topic: 'answers'
+mongo_conf:
+  database: 'surveyor'
+  username: 'surveyor'
+  password: 'surveyor'
+  host: 'mongodb'
+  port: 27017

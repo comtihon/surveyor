@@ -1,0 +1,20 @@
+steps:
+  - loop:
+      name: 'Wait for {{ survey_manager_url }} to be ready'
+      while:
+        if: {equals: {the: '{{ status }}', is_not: 'success'}}
+        do:
+        - wait: {seconds: 1}
+        - http:
+            name: 'Check {{ survey_manager_url }}'
+            post:
+              url: '{{ survey_manager_url }}/survey'
+              body: {}
+              verify: false
+            ignore_errors: true
+            response_code: 400 # will return 400 on empty survey if started
+        - echo:
+            from: '{{ survey_manager_url }} started.'
+            register: {status: 'success'}
+        max_cycle: 120  # 2 minutes
+  - check: {equals: {the: '{{ status }}', is: 'success'}}  # needed if loop exits after max_cycle

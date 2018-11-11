@@ -72,30 +72,16 @@ Run integrations tests for surveyor microservises.
 6. check `kafka` for answers
 7. check answer statistics in `mongodb` (sometimes test is too fast and fails here. Just re-run)
 8. check answer statistics via `statistics`
-### Travis test
-Same as full test but without kafka step, as there are some problems with docker, kafka, TravisCI and python-kafka.
 ### Run
 
-    make test_build && make test_install && survey_tester
-or simple:
+    make build && make run && make test
 
-    make test_run
 __Important__: Services should be accessible for tests. 
-Running `make run && ./travis/sleep_if_needed.sh && make test_run` will do the job.   
-__Requirements__:
-* [python3.6](https://www.python.org/downloads/release/python-360/). Service is not compatible with python2.7. 
-Compatibility with 3.0-3.5 versions was not tested. _(python should be linked to python3 in your os)_
-* [pip](https://pypi.python.org/pypi/pip). If your os provide `pip3` instead - you should modify Makefile to use pip3.
-* [wheel](https://pypi.python.org/pypi/wheel)
-All other dependencies should be resolved automatically by wheel. 
-If not - see them in `setup.py` `install_requires` section and use `sudo pip install <require>`.
 
 __Configuration__:
-System configuration is available in `tester/resources/services.yml`
+Environment configuration is available in `inventory/`
 
 ### Adding your test
 Add your test in two steps:
- * create module in `tester.test` package implementing `Test` module or any of its children.
- * and... that's all. Now second step  
-
-System configuration is passed to your `init` method as dict.
+ * add your script in  `script/tests/`.
+ * and... that's all. Now second step

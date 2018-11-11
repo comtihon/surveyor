@@ -1,0 +1,12 @@
+survey_manager_url: 'http://{{ MANAGER }}'
+survey_postgres: '{{ POSTGRES }}'
+survey_requests_url: '{{ REQUESTS }}'
+survey_statistics_url: '{{ STATISTICS }}'
+kafka_server: '{{ KAFKA }}'
+answer_topic: 'answers'
+mongo_conf:
+  database: '{{ MONGO_DB }}'
+  username: '{{ MONGO_USER }}'
+  password: '{{ MONGO_PASS }}'
+  host: '{{ MONGO_HOST }}'
+  port: '{{ MONGO_PORT }}'

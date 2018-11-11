@@ -1,0 +1,2 @@
+catcher
+catcher-modules[kafka, postgres, mongodb]
